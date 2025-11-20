@@ -1,6 +1,6 @@
 # Frequency-Modulation-and-Demodulation-using-NumPy-and-Matplotlib
 ### AIM
-    To implement and analyze frequency modulation (FM) using Python's NumPy and Matplotlib libraries.   
+To implement and analyze frequency modulation (FM) using Python's NumPy and Matplotlib libraries.   
 ### APPARATUS REQUIRED
 1.	Software: Python with NumPy and Matplotlib libraries  
 2.	Hardware: Personal Computer  
@@ -21,11 +21,65 @@ Frequency Modulation (FM) is a method of transmitting information over a carrier
 6.	Plot the Signals: Use Matplotlib to plot the message signal, carrier signal, and modulated signal.
 
 ### PROGRAM
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from scipy.signal import hilbert
+        
+        Am = 8.8
+        fm = 863
+        fs = 863000
+        Ac = 17.6
+        fc = 8630
+        b = 5
+        
+        t = np.arange(0, 2/fm, 1/fs)
+        
+        m = Am * np.cos(2 * np.pi * fm * t)
+        c = Ac * np.cos(2 * np.pi * fc * t)
+        s = Ac * np.cos(2 * np.pi * fc * t + b * np.sin(2 * np.pi * fm * t))
+        
+        
+        ds = np.diff(s)
+        analytic_signal = hilbert(ds) 
+        envelope = np.abs(analytic_signal) 
+        demod = envelope - np.mean(envelope)  
+        demod = demod / np.max(np.abs(demod)) * Am 
+        
+        plt.figure(figsize=(10,8))
+        
+        plt.subplot(4,1,1)
+        plt.plot(t, m)
+        plt.title("Message Signal")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Amplitude")
+        
+        plt.subplot(4,1,2)
+        plt.plot(t, c)
+        plt.title("Carrier Signal")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Amplitude")
+        
+        plt.subplot(4,1,3)
+        plt.plot(t, s)
+        plt.title("Frequency Modulated Signal (FM)")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Amplitude")
+        
+        plt.subplot(4,1,4)
+        plt.plot(t[:-1], demod)  # ds shortens length by 1
+        plt.title("Demodulated Signal (Recovered Message)")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Amplitude")
+        
+        plt.tight_layout()
+        plt.show()
 
 
 ### TABULATION
-
+<img width="1280" height="1209" alt="image" src="https://github.com/user-attachments/assets/8c9ab7f5-eac7-4e6e-9a40-4df575c4dd87" />
+  
 ### OUTPUT
-   
+ <img width="405" height="292" alt="image" src="https://github.com/user-attachments/assets/4fea72d7-0531-40a2-bfad-1fb577c9d067" />
+  
 ### RESULT
-
+The message signal, carrier signal, and frequency modulated (FM) signal will be displayed in separate plots. The modulated signal will show frequency variations corresponding to the amplitude of the message signal.  
